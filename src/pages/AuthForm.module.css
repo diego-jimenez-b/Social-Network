@@ -1,0 +1,35 @@
+.form-container {
+  border: 2px solid black;
+  border-radius: 15px;
+  width: 440px;
+  padding: 20px 0;
+  position: absolute;
+  right: 20px;
+  top: 40%;
+  transform: translateY(-50%);
+  text-align: center; 
+}
+
+.form-container h1 {
+  font-size: 28px;
+  margin-top: 0;
+}
+
+.form-container input {
+  outline: none;
+  border: .5px solid rgb(170, 170, 170);
+  border-radius: 15px;
+  padding: 5px 10px;
+  display: block;
+  width: 80%;
+  margin: 13px auto;
+}
+.form-container input:focus {
+  border: 2px solid black;
+}
+
+.text {
+  font-size: 14px;
+  display: block  ;
+  margin-top: 10px;
+}
