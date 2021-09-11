@@ -9,6 +9,8 @@ const AuthForm = () => {
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  const nameInputRef = useRef();
+  const lastnameInputRef = useRef();
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
@@ -25,7 +27,22 @@ const AuthForm = () => {
     if (isLogin) {
       authCtx.login(enteredEmail, enteredPassword);
     } else {
-      authCtx.createNewUser(enteredEmail, enteredPassword);
+      const enteredName = nameInputRef.current.value.trim();
+      const enteredLastname = lastnameInputRef.current.value.trim();
+
+      if (enteredName === '' || enteredLastname === '') {
+        alert('Please enter a valid name and lastname (non-empty inputs)');
+        return;
+      }
+
+      const fullname = enteredName + ' ' + enteredLastname;
+      authCtx.createNewUser(
+        enteredEmail,
+        enteredPassword,
+        enteredName,
+        enteredLastname,
+        fullname
+      );
     }
   };
 
@@ -51,6 +68,14 @@ const AuthForm = () => {
           ref={passwordInputRef}
           autoComplete={passwordAutoTxt}
         />
+
+        {!isLogin && (
+          <div className={classes['user-info']}>
+            <input type='text' placeholder='Name' ref={nameInputRef} />
+            <input type='text' placeholder='Lastname' ref={lastnameInputRef} />
+          </div>
+        )}
+
         <button type='submit'>{isLogin ? 'Log in' : 'Sign up'}</button>
       </form>
 

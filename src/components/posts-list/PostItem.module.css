@@ -1,0 +1,30 @@
+.post {
+  margin: 13px 0;
+  box-shadow: 0px 2px 2px rgb(150, 150, 150);
+  position: relative;
+}
+.post > button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.post > button:last-of-type {
+  right: 50px;
+}
+.post div {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.post div:first-of-type {
+  min-height: 40px;
+  background-color: rgb(49, 76, 165);
+  color: white;
+}
+.post div:first-of-type span {
+  font-size: 14px;
+}
+

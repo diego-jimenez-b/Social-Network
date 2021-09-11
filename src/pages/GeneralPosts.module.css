@@ -1,0 +1,11 @@
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin: 20px 0;
+}
+
+.posts {
+  width: 80%;
+  max-width: 900px;
+  margin: 20px auto;
+}

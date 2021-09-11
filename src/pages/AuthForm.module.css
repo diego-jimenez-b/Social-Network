@@ -14,7 +14,6 @@
   font-size: 28px;
   margin-top: 0;
 }
-
 .form-container input {
   outline: none;
   border: .5px solid rgb(170, 170, 170);
@@ -32,4 +31,10 @@
   font-size: 14px;
   display: block  ;
   margin-top: 10px;
+}
+
+.user-info {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
 }

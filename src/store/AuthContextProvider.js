@@ -1,26 +1,61 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AuthContext from './auth-context';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useHistory } from 'react-router';
 
 const initialUserState = {
   isLoggedIn: false,
   id: '',
+  name: null,
 };
 
 const AuthContextProvider = (props) => {
   const [user, setUser] = useState(initialUserState);
+  const history = useHistory();
 
   const auth = getAuth();
 
-  const createNewUser = (email, password) => {
+  useEffect(() => {
+    // console.log('working');
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // console.log(user.uid);
+        const getUser = async () => {
+          const docRef = doc(db, 'users', user.uid);
+          const docSnap = await getDoc(docRef);
+          const name = docSnap.data().fullname;
+          // setName(name);
+          setUser({ isLoggedIn: true, id: user.uid, name });
+        };
+        getUser();
+      }
+    });
+  }, [auth]);
+
+  const createNewUser = (email, password, name, lastname, fullname) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
         setUser({ isLoggedIn: true, id: userCredential.user.uid });
+        return userCredential.user.uid;
+      })
+      .then((id) => {
+        return setDoc(doc(db, 'users', id), {
+          name,
+          lastname,
+          fullname,
+        });
+      })
+      .then(() => {
+        alert('You have succesfully created an account');
+        history.push('/profile');
       })
       .catch((err) => {
         alert(err.code);
@@ -32,6 +67,9 @@ const AuthContextProvider = (props) => {
       .then((userCredential) => {
         console.log(userCredential);
         setUser({ isLoggedIn: true, id: userCredential.user.uid });
+      })
+      .then(() => {
+        history.push('/profile');
       })
       .catch((err) => {
         alert(err.code);
@@ -50,6 +88,7 @@ const AuthContextProvider = (props) => {
   const authContext = {
     isLoggedIn: user.isLoggedIn,
     userId: user.id,
+    userName: user.name,
     createNewUser,
     login,
     logout,

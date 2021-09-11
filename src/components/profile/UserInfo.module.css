@@ -1,0 +1,8 @@
+.info {
+  width: 35%;
+  border: 2px solid black;
+  text-align: center;
+}
+.info h3 {
+  margin: 10px 0
+}
