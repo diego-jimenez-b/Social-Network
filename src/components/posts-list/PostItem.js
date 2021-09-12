@@ -2,14 +2,15 @@ import { useLocation } from 'react-router';
 import { deleteDocument } from '../../firebaseActions';
 import classes from './PostItem.module.css';
 
-const PostItem = ({ data, userId, onEdit }) => {
+const PostItem = ({ data, userId, onEdit, isPrivate }) => {
   const location = useLocation();
 
   const deletePostHandler = () => {
-    deleteDocument(`users/${userId}/posts/${data.id}`);
+    const collection = isPrivate ? 'private-posts' : 'posts';
+    deleteDocument(`users/${userId}/${collection}/${data.id}`);
   };
   const startEditingHandler = () => {
-    onEdit({ text: data.text, id: data.id });
+    onEdit({ text: data.text, id: data.id, isPrivate });
   };
 
   const inGeneral = location.pathname === '/general';
@@ -20,6 +21,7 @@ const PostItem = ({ data, userId, onEdit }) => {
       {!inGeneral && onEdit && (
         <button onClick={startEditingHandler}>edit</button>
       )}
+
       <div>
         {inGeneral && <span>{data.author} &nbsp;</span>}
         <span>{new Date(data.timestamp).toLocaleString()}</span>

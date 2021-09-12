@@ -1,7 +1,6 @@
 import { useContext, useRef } from 'react';
 import classes from './NewPost.module.css';
 import AuthContext from '../../store/auth-context';
-import Button from '../UI/Button';
 import { addDocument, updateDocument } from '../../firebaseActions';
 
 const NewPost = ({ edit, onFinishEditing }) => {
@@ -12,7 +11,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
     postRef.current.value = edit.text;
   }
 
-  const savePostHandler = async () => {
+  const savePostHandler = async (isPrivate) => {
     const post = postRef.current.value;
 
     if (post.trim().length === 0) {
@@ -20,11 +19,18 @@ const NewPost = ({ edit, onFinishEditing }) => {
       return;
     }
 
+    let collection = 'posts';
+
     if (edit) {
-      await updateDocument(`users/${authCtx.userId}/posts/${edit.id}`, post);
+      if (edit.isPrivate) collection = 'private-posts';
+      await updateDocument(
+        `users/${authCtx.userId}/${collection}/${edit.id}`,
+        post
+      );
       onFinishEditing();
     } else {
-      await addDocument(`users/${authCtx.userId}/posts`, {
+      if (isPrivate === true) collection = 'private-posts';
+      await addDocument(`users/${authCtx.userId}/${collection}`, {
         text: post,
         timestamp: new Date().getTime(),
         author: authCtx.userName,
@@ -42,10 +48,21 @@ const NewPost = ({ edit, onFinishEditing }) => {
   return (
     <div className={classes['new-post']}>
       <textarea placeholder='What do you want to share?' ref={postRef} />
-      <Button onClick={savePostHandler}>
+
+      <button className='btn' onClick={savePostHandler}>
         {edit ? 'Confirm edit' : 'Share'}
-      </Button>
-      {edit && <Button onClick={cancelEditingHandler}>Cancel</Button>}
+      </button>
+
+      {!edit && (
+        <button className='btn' onClick={savePostHandler.bind(null, true)}>
+          Save as private
+        </button>
+      )}
+      {edit && (
+        <button className='btn' onClick={cancelEditingHandler}>
+          Cancel
+        </button>
+      )}
     </div>
   );
 };

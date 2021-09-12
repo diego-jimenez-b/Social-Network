@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
-import Button from '../UI/Button';
 import classes from './MainNavigation.module.css';
 
 const MainNavigation = () => {
@@ -18,7 +17,7 @@ const MainNavigation = () => {
         <Link to='/profile'>Profile</Link>
       </div>
 
-      <Button onClick={logoutHandler}>Logout</Button>
+      <button className='btn' onClick={logoutHandler}>Logout</button>
     </nav>
   );
 };

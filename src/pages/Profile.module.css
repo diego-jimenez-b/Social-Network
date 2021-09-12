@@ -4,8 +4,26 @@
   justify-content: space-between;
   margin: 20px auto;
   width: 80%;
-  max-width: 800px;
+  max-width: 850px;
 }
+
 .posts {
   width: 60%;
+}
+
+.posts-section {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+.posts-section h2 {
+  font-size: 21px;
+  margin: 10px 5px;
+  display: inline-block;
+}
+.posts-section img {
+  width: 15px;
+  cursor: pointer;
+  transition: .2s;
 }

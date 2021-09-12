@@ -13,3 +13,16 @@ body {
   top: 0;
   left: 0;
 }
+
+.btn {
+  background-color: rgb(166, 243, 130);
+  border: none;
+  border-radius: 30px;
+  padding: 4.5px 15px;
+  font-weight: bold;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: rgb(152, 228, 117);
+}

@@ -9,7 +9,7 @@ import {
 import classes from './PostsList.module.css';
 import { db } from '../../firebase';
 
-const PostsList = ({ isCollectionGroup, collPath, userId, onEdit }) => {
+const PostsList = ({ isCollectionGroup, collPath, userId, onEdit, isPrivate }) => {
   const [postsList, setPostsList] = useState([]);
 
   useEffect(() => {
@@ -25,7 +25,9 @@ const PostsList = ({ isCollectionGroup, collPath, userId, onEdit }) => {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       // console.log(querySnapshot);
       const posts = [];
-      querySnapshot.forEach((doc) => posts.push({ ...doc.data(), id: doc.id }));
+      querySnapshot.forEach((doc) => {
+        console.log(doc);
+        posts.push({ ...doc.data(), id: doc.id })});
       setPostsList(posts);
     });
 
@@ -45,6 +47,7 @@ const PostsList = ({ isCollectionGroup, collPath, userId, onEdit }) => {
               key={post.id}
               userId={userId}
               onEdit={onEdit}
+              isPrivate={isPrivate}
             />
           ))}
         </ul>
