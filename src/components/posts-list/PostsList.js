@@ -9,8 +9,11 @@ import {
 import classes from './PostsList.module.css';
 import { db } from '../../firebase';
 
-const PostsList = ({ isCollectionGroup, collPath, userId, onEdit, isPrivate }) => {
+const PostsList = (props) => {
   const [postsList, setPostsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { isCollectionGroup, collPath, userId, onEdit, isPrivate } = props;
 
   useEffect(() => {
     console.log('effect working');
@@ -23,12 +26,10 @@ const PostsList = ({ isCollectionGroup, collPath, userId, onEdit, isPrivate }) =
     }
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      // console.log(querySnapshot);
       const posts = [];
-      querySnapshot.forEach((doc) => {
-        console.log(doc);
-        posts.push({ ...doc.data(), id: doc.id })});
+      querySnapshot.forEach((doc) => posts.push({ ...doc.data(), id: doc.id }));
       setPostsList(posts);
+      setIsLoading(false);
     });
 
     return unsubscribe;
@@ -38,8 +39,9 @@ const PostsList = ({ isCollectionGroup, collPath, userId, onEdit, isPrivate }) =
 
   return (
     <div className={classes.posts}>
-      {postsList.length === 0 && <p>No posts found</p>}
-      {postsList.length !== 0 && (
+      {isLoading && <p>Loading</p>}
+      {!isLoading && postsList.length === 0 && <p>No posts found</p>}
+      {!isLoading && postsList.length !== 0 && (
         <ul>
           {sortedPosts.map((post) => (
             <PostItem
