@@ -13,7 +13,7 @@ const PostsList = (props) => {
   const [postsList, setPostsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { isCollectionGroup, collPath, userId, onEdit, isPrivate } = props;
+  const { isCollectionGroup, collPath, onEdit, isPrivate } = props;
 
   useEffect(() => {
     console.log('effect working');
@@ -47,7 +47,6 @@ const PostsList = (props) => {
             <PostItem
               data={post}
               key={post.id}
-              userId={userId}
               onEdit={onEdit}
               isPrivate={isPrivate}
             />

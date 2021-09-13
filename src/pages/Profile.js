@@ -55,7 +55,6 @@ const Profile = () => {
           {privatePosts && (
             <PostsList
               collPath={`users/${authCtx.userId}/private-posts`}
-              userId={authCtx.userId}
               onEdit={editPostHandler}
               isPrivate={true}
             />

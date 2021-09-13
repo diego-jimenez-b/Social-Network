@@ -34,6 +34,11 @@ const NewPost = ({ edit, onFinishEditing }) => {
         text: post,
         timestamp: new Date().getTime(),
         author: authCtx.userName,
+        likes: {
+          counter: 0,
+          users: [],
+        },
+        author_id: authCtx.userId,
       });
     }
 

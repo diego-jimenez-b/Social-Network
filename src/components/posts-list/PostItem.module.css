@@ -1,17 +1,24 @@
 .post {
   margin: 13px 0;
-  box-shadow: 0px 2px 2px rgb(150, 150, 150);
+  box-shadow: 0px 2px 3px rgb(150, 150, 150);
   position: relative;
 }
-.post > button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+
+.actions {
+  display: flex;
+  align-items: center;
 }
-.post > button:last-of-type {
-  right: 50px;
+.actions img {
+  margin-left: 10px;
+  height: 17px;
+  filter: invert(100%) sepia(0%) saturate(1%) hue-rotate(264deg)
+    brightness(105%) contrast(101%);
 }
-.post div {
+.actions button {
+  cursor: pointer;
+}
+
+.post > div {
   min-height: 50px;
   display: flex;
   align-items: center;
@@ -19,12 +26,26 @@
   padding: 10px;
 }
 
-.post div:first-of-type {
+.post > div:first-of-type {
   min-height: 40px;
   background-color: rgb(49, 76, 165);
   color: white;
 }
-.post div:first-of-type span {
+.post > div:first-of-type span {
   font-size: 14px;
 }
 
+.post > div:nth-child(3) {
+  background-color: rgb(245, 245, 245);
+  min-height: 30px;
+  padding: 7px;
+  justify-content: flex-start;
+}
+.post > div:nth-child(3) img {
+  cursor: pointer;
+  width: 20px;
+  margin: 0px 4px 0 0;
+}
+.post > div:nth-child(3) span {
+  font-size: 14px;
+}
