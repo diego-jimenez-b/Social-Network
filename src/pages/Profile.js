@@ -21,6 +21,7 @@ const Profile = () => {
   return (
     <div className={classes.profile}>
       <UserInfo />
+      
       <div className={classes.posts}>
         <NewPost edit={editing} onFinishEditing={finishEditingHandler} />
 

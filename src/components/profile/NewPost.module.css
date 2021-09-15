@@ -1,7 +1,7 @@
 .new-post {
   border: 1px solid #ddd;
   width: 100%;
-  text-align: end;
+  /* text-align: end; */
   padding: 10px;
 }
 
@@ -13,4 +13,18 @@
 }
 .new-post button {
   margin: 0 3px;
+}
+
+.edit-img {
+  display: flex;
+  align-items: center;
+}
+.edit-img img {
+  height: 70px;
+  margin: 0 13px 10px 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
 }

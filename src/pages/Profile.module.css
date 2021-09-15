@@ -3,12 +3,13 @@
   align-items: flex-start;
   justify-content: space-between;
   margin: 20px auto;
-  width: 80%;
-  max-width: 850px;
+  /* width: 80%; */
+  max-width: 930px;
+  padding: 0 15px;
 }
 
 .posts {
-  width: 60%;
+  width: 65%;
 }
 
 .posts-section {

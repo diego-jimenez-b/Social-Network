@@ -23,6 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 10px;
 }
 
@@ -35,6 +36,23 @@
   font-size: 14px;
 }
 
+.post > div:nth-child(2) {
+  text-align: center;
+  justify-content: center;
+}
+.post > div:nth-child(2) span {
+  display: block;
+  width: 100%;
+  text-align: start;
+  margin: 0 auto;
+}
+.post > div:nth-child(2) img {
+  cursor: auto;
+  width: auto;
+  height: 90px;
+  margin-bottom: 7px;
+}
+
 .post > div:nth-child(3) {
   background-color: rgb(245, 245, 245);
   min-height: 30px;
@@ -42,7 +60,6 @@
   justify-content: flex-start;
 }
 .post > div:nth-child(3) img {
-  cursor: pointer;
   width: 20px;
   margin: 0px 4px 0 0;
 }

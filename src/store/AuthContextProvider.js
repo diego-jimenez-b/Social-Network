@@ -26,12 +26,10 @@ const AuthContextProvider = (props) => {
     // console.log('working');
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // console.log(user.uid);
         const getUser = async () => {
           const docRef = doc(db, 'users', user.uid);
           const docSnap = await getDoc(docRef);
           const name = docSnap.data().fullname;
-          // setName(name);
           setUser({ isLoggedIn: true, id: user.uid, name });
         };
         getUser();

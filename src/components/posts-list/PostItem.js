@@ -1,14 +1,24 @@
 import { useLocation } from 'react-router';
 import AuthContext from '../../store/auth-context';
-import { useContext } from 'react';
-import { deleteDocument, modifyLikes } from '../../firebaseActions';
+import { useContext, useEffect, useState } from 'react';
+import {
+  deleteDocument,
+  modifyLikes,
+  removeImage,
+} from '../../firebaseActions';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase';
+
 import trashIcon from '../../assets/icons/trash.svg';
 import heartEmptIcon from '../../assets/icons/heart-empty.svg';
 import heartFullIcon from '../../assets/icons/heart-full.svg';
 import classes from './PostItem.module.css';
 
 const PostItem = ({ data, onEdit, isPrivate }) => {
+  const [imgUrl, setImgUrl] = useState(null);
   const authCtx = useContext(AuthContext);
+
+  const { text, id, image, likes, author_id, author, timestamp } = data;
   const userId = authCtx.userId;
   const userLiked = data.likes.users.includes(userId);
 
@@ -16,11 +26,14 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
 
   const deletePostHandler = () => {
     const collection = isPrivate ? 'private-posts' : 'posts';
-    deleteDocument(`users/${userId}/${collection}/${data.id}`);
+    deleteDocument(`users/${userId}/${collection}/${id}`);
+    if (image) {
+      removeImage(image);
+    }
   };
 
   const startEditingHandler = () => {
-    onEdit({ text: data.text, id: data.id, isPrivate });
+    onEdit({ text, id, image: imgUrl, isPrivate, image_local: image });
   };
 
   const likeHandler = () => {
@@ -28,23 +41,30 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
 
     const type = userLiked ? null : 'like';
     modifyLikes(
-      `users/${data.author_id}/posts/${data.id}`,
+      `users/${author_id}/posts/${id}`,
       userId,
-      data.likes.counter,
-      data.likes.users,
+      likes.counter,
+      likes.users,
       type
     );
   };
 
-  const inGeneral = location.pathname === '/general';
+  useEffect(() => {
+    if (image) {
+      getDownloadURL(ref(storage, image)).then((url) => {
+        setImgUrl(url);
+      });
+    }
+    if (!image) setImgUrl(null);
+  }, [image]);
 
-  console.log(data.likes);
+  const inGeneral = location.pathname === '/general';
 
   return (
     <li className={classes.post}>
       <div>
-        {inGeneral && <span>{data.author} &nbsp;</span>}
-        <span>{new Date(data.timestamp).toLocaleString()}</span>
+        {inGeneral && <span>{author} &nbsp;</span>}
+        <span>{new Date(timestamp).toLocaleString()}</span>
 
         {!inGeneral && (
           <div className={classes.actions}>
@@ -55,7 +75,8 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
       </div>
 
       <div>
-        <span>{data.text}</span>
+        {imgUrl && <img id='post-image' src={imgUrl} alt='post' />}
+        <span>{text}</span>
       </div>
 
       {!isPrivate && (
@@ -65,7 +86,7 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
             src={userLiked ? heartFullIcon : heartEmptIcon}
             alt='empty-heart-icon'
           />
-          <span>{data.likes.counter} likes</span>
+          <span>{likes.counter} likes</span>
         </div>
       )}
     </li>

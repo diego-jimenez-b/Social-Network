@@ -26,6 +26,7 @@ const PostsList = (props) => {
     }
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      console.log(querySnapshot);
       const posts = [];
       querySnapshot.forEach((doc) => posts.push({ ...doc.data(), id: doc.id }));
       setPostsList(posts);
