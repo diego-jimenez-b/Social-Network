@@ -1,6 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import AuthContext from '../../store/auth-context';
-import { addDocument, updatePost, uploadImage } from '../../firebaseActions';
+import {
+  addDocument,
+  getImageUrl,
+  updatePost,
+  uploadImage,
+} from '../../firebaseActions';
 import classes from './NewPost.module.css';
 
 const NewPost = ({ edit, onFinishEditing }) => {
@@ -50,32 +55,36 @@ const NewPost = ({ edit, onFinishEditing }) => {
     }
 
     let collection = 'posts';
+    let filePath;
+    if (file) {
+      filePath = `users/${authCtx.userId}/${collection}/${file.name}`;
+    }
     if (edit) {
       if (edit.isPrivate) collection = 'private-posts';
 
       let newImageUrl;
       if (file) {
-        newImageUrl = `users/${authCtx.userId}/${collection}/${file.name}`;
-        await uploadImage(newImageUrl, file);
+        await uploadImage(filePath, file);
+        await getImageUrl(filePath, (url) => (newImageUrl = url));
       }
 
       await updatePost(
         `users/${authCtx.userId}/${collection}/${edit.id}`,
         post,
         !editImg ? editImg : file ? newImageUrl : null,
-        edit.image_local
+        edit.image_local,
+        filePath
       );
 
       onFinishEditing();
     } else {
       if (isPrivate === true) collection = 'private-posts';
 
+      let newImageUrl;
       if (file) {
         console.log('file uploaded');
-        await uploadImage(
-          `users/${authCtx.userId}/${collection}/${file.name}`,
-          file
-        );
+        await uploadImage(filePath, file);
+        await getImageUrl(filePath, (url) => (newImageUrl = url));
       }
 
       await addDocument(`users/${authCtx.userId}/${collection}`, {
@@ -88,9 +97,8 @@ const NewPost = ({ edit, onFinishEditing }) => {
         },
         author_id: authCtx.userId,
         author_photo: authCtx.profilePicture ? authCtx.profilePicture : null,
-        image: file
-          ? `users/${authCtx.userId}/${collection}/${file.name}`
-          : null,
+        image: file ? newImageUrl : null,
+        image_local: filePath ? filePath : null,
       });
     }
 

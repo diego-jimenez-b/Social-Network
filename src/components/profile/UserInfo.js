@@ -20,7 +20,6 @@ const UserInfo = () => {
 
   const { profilePicture: photo } = authCtx;
   useEffect(() => {
-    console.log(photo);
     if (photo) {
       setImage(photo);
       initialPicture = photo;

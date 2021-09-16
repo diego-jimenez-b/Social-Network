@@ -6,7 +6,12 @@ import {
   getDoc,
   collection,
 } from 'firebase/firestore';
-import { ref, deleteObject, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {
+  ref,
+  deleteObject,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
 import { storage } from './firebase';
 import { db } from './firebase';
 
@@ -19,21 +24,25 @@ export const deleteDocument = (path) => {
 };
 
 export const updateDocument = async (path, obj) => {
-  await updateDoc(doc(db, path), obj)
-}
+  await updateDoc(doc(db, path), obj);
+};
 
-export const updatePost = async (path, value, updatedImg, prevImg) => {
-  console.log(updatedImg);
+export const updatePost = async (path, text, newImg, prevImg, newImgLocal) => {
+  console.log(newImg);
 
-  let updatedObj = { text: value };
+  let updatedObj = { text };
 
-  if (updatedImg === false || (updatedImg && prevImg)) {
-    updatedObj = { text: value, image: updatedImg ? updatedImg : null };
+  if (newImg === false || (newImg && prevImg)) {
+    updatedObj = {
+      text,
+      image: newImg ? newImg : null,
+      image_local: newImgLocal ? newImgLocal : null,
+    };
     removeImage(prevImg);
   }
 
-  if (updatedImg && !prevImg) {
-    updatedObj = { text: value, image: updatedImg };
+  if (newImg && !prevImg) {
+    updatedObj = { text, image: newImg, image_local: newImgLocal };
   }
 
   console.log(updatedObj);
@@ -52,9 +61,9 @@ export const removeImage = (path) => {
 };
 
 export const getImageUrl = async (image, action) => {
-  const url = await getDownloadURL(ref(storage, image))
-  action(url)
-}
+  const url = await getDownloadURL(ref(storage, image));
+  action(url);
+};
 
 export const modifyLikes = (path, id, currentNum, currentUsers, type) => {
   if (type === 'like' && currentUsers.includes(id)) return;

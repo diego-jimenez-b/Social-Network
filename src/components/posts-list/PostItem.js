@@ -1,9 +1,8 @@
 import { useLocation } from 'react-router';
 import AuthContext from '../../store/auth-context';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import {
   deleteDocument,
-  getImageUrl,
   modifyLikes,
   removeImage,
 } from '../../firebaseActions';
@@ -15,15 +14,22 @@ import profileImg from '../../assets/icons/profile-user.svg';
 import classes from './PostItem.module.css';
 
 const PostItem = ({ data, onEdit, isPrivate }) => {
-  const [imgUrl, setImgUrl] = useState(null);
   const authCtx = useContext(AuthContext);
 
-  const { text, id, image, likes, author_id, author, timestamp, author_photo } =
-    data;
+  const {
+    text,
+    id,
+    image,
+    image_local,
+    likes,
+    author_id,
+    author,
+    timestamp,
+    author_photo,
+  } = data;
+
   const userId = authCtx.userId;
   const userLiked = data.likes.users.includes(userId);
-
-  console.log(author_photo);
 
   const location = useLocation();
 
@@ -31,12 +37,12 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
     const collection = isPrivate ? 'private-posts' : 'posts';
     deleteDocument(`users/${userId}/${collection}/${id}`);
     if (image) {
-      removeImage(image);
+      removeImage(image_local);
     }
   };
 
   const startEditingHandler = () => {
-    onEdit({ text, id, image: imgUrl, isPrivate, image_local: image });
+    onEdit({ text, id, image, isPrivate, image_local });
   };
 
   const likeHandler = () => {
@@ -51,13 +57,6 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
       type
     );
   };
-
-  useEffect(() => {
-    if (image) {
-      getImageUrl(image, (url) => setImgUrl(url));
-    }
-    if (!image) setImgUrl(null);
-  }, [image]);
 
   const inGeneral = location.pathname === '/general';
 
@@ -87,7 +86,7 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
       </div>
 
       <div>
-        {imgUrl && <img id='post-image' src={imgUrl} alt='post' />}
+        {image && <img id='post-image' src={image} alt='post' />}
         <span>{text}</span>
       </div>
 
