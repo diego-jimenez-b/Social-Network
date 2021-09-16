@@ -3,6 +3,9 @@
   box-shadow: 0px 2px 3px rgb(150, 150, 150);
   position: relative;
 }
+.post img {
+  cursor: pointer;
+}
 
 .actions {
   display: flex;
@@ -65,4 +68,25 @@
 }
 .post > div:nth-child(3) span {
   font-size: 14px;
+}
+
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+.profile-img {
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 7px;
+}
+
+.img {
+  background-color: white;
+  width: 110%;
 }

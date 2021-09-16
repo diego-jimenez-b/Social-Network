@@ -23,7 +23,7 @@
   margin: 10px 5px;
   display: inline-block;
 }
-.posts-section img {
+.posts-section > img {
   width: 15px;
   cursor: pointer;
   transition: .2s;

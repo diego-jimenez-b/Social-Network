@@ -3,8 +3,9 @@ import AuthContext from '../store/auth-context';
 import UserInfo from '../components/profile/UserInfo';
 import NewPost from '../components/profile/NewPost';
 import PostsList from '../components/posts-list/PostsList';
-import classes from './Profile.module.css';
+
 import arrowImg from '../assets/icons/down-arrow.svg';
+import classes from './Profile.module.css';
 
 const Profile = () => {
   const [editing, setEditing] = useState(null);

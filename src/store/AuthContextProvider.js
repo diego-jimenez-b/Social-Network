@@ -6,9 +6,10 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useHistory } from 'react-router';
+import { getUserInfo } from '../firebaseActions';
 
 const initialUserState = {
   isLoggedIn: false,
@@ -18,6 +19,7 @@ const initialUserState = {
 
 const AuthContextProvider = (props) => {
   const [user, setUser] = useState(initialUserState);
+  const [userChanges, setUserChanges] = useState(0);
   const history = useHistory();
 
   const auth = getAuth();
@@ -27,15 +29,18 @@ const AuthContextProvider = (props) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const getUser = async () => {
-          const docRef = doc(db, 'users', user.uid);
-          const docSnap = await getDoc(docRef);
-          const name = docSnap.data().fullname;
-          setUser({ isLoggedIn: true, id: user.uid, name });
+          const userInfo = await getUserInfo(user.uid);
+          setUser({
+            isLoggedIn: true,
+            id: user.uid,
+            name: userInfo.fullname,
+            profilePicture: userInfo.photo,
+          });
         };
         getUser();
       }
     });
-  }, [auth]);
+  }, [auth, userChanges]);
 
   const createNewUser = (email, password, name, lastname, fullname) => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -49,6 +54,7 @@ const AuthContextProvider = (props) => {
           name,
           lastname,
           fullname,
+          email,
         });
       })
       .then(() => {
@@ -82,15 +88,20 @@ const AuthContextProvider = (props) => {
   const checkUserStatus = () => {
     console.log(auth.currentUser);
   };
+  const userChanged = () => {
+    setUserChanges((prevState) => (prevState += 1));
+  };
 
   const authContext = {
     isLoggedIn: user.isLoggedIn,
     userId: user.id,
     userName: user.name,
+    profilePicture: user.profilePicture,
     createNewUser,
     login,
     logout,
     checkUserStatus,
+    userChanged,
   };
 
   return (

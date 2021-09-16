@@ -1,10 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import AuthContext from '../../store/auth-context';
-import {
-  addDocument,
-  updateDocument,
-  uploadImage,
-} from '../../firebaseActions';
+import { addDocument, updatePost, uploadImage } from '../../firebaseActions';
 import classes from './NewPost.module.css';
 
 const NewPost = ({ edit, onFinishEditing }) => {
@@ -63,7 +59,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
         await uploadImage(newImageUrl, file);
       }
 
-      await updateDocument(
+      await updatePost(
         `users/${authCtx.userId}/${collection}/${edit.id}`,
         post,
         !editImg ? editImg : file ? newImageUrl : null,
@@ -76,7 +72,10 @@ const NewPost = ({ edit, onFinishEditing }) => {
 
       if (file) {
         console.log('file uploaded');
-        await uploadImage(`users/${authCtx.userId}/${file.name}`, file);
+        await uploadImage(
+          `users/${authCtx.userId}/${collection}/${file.name}`,
+          file
+        );
       }
 
       await addDocument(`users/${authCtx.userId}/${collection}`, {
@@ -88,7 +87,10 @@ const NewPost = ({ edit, onFinishEditing }) => {
           users: [],
         },
         author_id: authCtx.userId,
-        image: file ? `users/${authCtx.userId}/${file.name}` : null,
+        author_photo: authCtx.profilePicture ? authCtx.profilePicture : null,
+        image: file
+          ? `users/${authCtx.userId}/${collection}/${file.name}`
+          : null,
       });
     }
 

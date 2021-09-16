@@ -3,24 +3,27 @@ import AuthContext from '../../store/auth-context';
 import { useContext, useEffect, useState } from 'react';
 import {
   deleteDocument,
+  getImageUrl,
   modifyLikes,
   removeImage,
 } from '../../firebaseActions';
-import { ref, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../firebase';
 
 import trashIcon from '../../assets/icons/trash.svg';
 import heartEmptIcon from '../../assets/icons/heart-empty.svg';
 import heartFullIcon from '../../assets/icons/heart-full.svg';
+import profileImg from '../../assets/icons/profile-user.svg';
 import classes from './PostItem.module.css';
 
 const PostItem = ({ data, onEdit, isPrivate }) => {
   const [imgUrl, setImgUrl] = useState(null);
   const authCtx = useContext(AuthContext);
 
-  const { text, id, image, likes, author_id, author, timestamp } = data;
+  const { text, id, image, likes, author_id, author, timestamp, author_photo } =
+    data;
   const userId = authCtx.userId;
   const userLiked = data.likes.users.includes(userId);
+
+  console.log(author_photo);
 
   const location = useLocation();
 
@@ -51,9 +54,7 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
 
   useEffect(() => {
     if (image) {
-      getDownloadURL(ref(storage, image)).then((url) => {
-        setImgUrl(url);
-      });
+      getImageUrl(image, (url) => setImgUrl(url));
     }
     if (!image) setImgUrl(null);
   }, [image]);
@@ -63,7 +64,18 @@ const PostItem = ({ data, onEdit, isPrivate }) => {
   return (
     <li className={classes.post}>
       <div>
-        {inGeneral && <span>{author} &nbsp;</span>}
+        {inGeneral && (
+          <div className={classes['user-info']}>
+            <div className={classes['profile-img']}>
+              <img
+                className={classes.img}
+                src={author_photo ? author_photo : profileImg}
+                alt='profile'
+              />
+            </div>
+            <span>{author} &nbsp;</span>
+          </div>
+        )}
         <span>{new Date(timestamp).toLocaleString()}</span>
 
         {!inGeneral && (

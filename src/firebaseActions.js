@@ -3,9 +3,10 @@ import {
   deleteDoc,
   updateDoc,
   addDoc,
+  getDoc,
   collection,
 } from 'firebase/firestore';
-import { ref, deleteObject, uploadBytes } from 'firebase/storage';
+import { ref, deleteObject, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from './firebase';
 import { db } from './firebase';
 
@@ -17,7 +18,11 @@ export const deleteDocument = (path) => {
   deleteDoc(doc(db, path));
 };
 
-export const updateDocument = async (path, value, updatedImg, prevImg) => {
+export const updateDocument = async (path, obj) => {
+  await updateDoc(doc(db, path), obj)
+}
+
+export const updatePost = async (path, value, updatedImg, prevImg) => {
   console.log(updatedImg);
 
   let updatedObj = { text: value };
@@ -26,7 +31,7 @@ export const updateDocument = async (path, value, updatedImg, prevImg) => {
     updatedObj = { text: value, image: updatedImg ? updatedImg : null };
     removeImage(prevImg);
   }
-  
+
   if (updatedImg && !prevImg) {
     updatedObj = { text: value, image: updatedImg };
   }
@@ -45,6 +50,11 @@ export const removeImage = (path) => {
   const imgRef = ref(storage, path);
   deleteObject(imgRef);
 };
+
+export const getImageUrl = async (image, action) => {
+  const url = await getDownloadURL(ref(storage, image))
+  action(url)
+}
 
 export const modifyLikes = (path, id, currentNum, currentUsers, type) => {
   if (type === 'like' && currentUsers.includes(id)) return;
@@ -65,4 +75,9 @@ export const modifyLikes = (path, id, currentNum, currentUsers, type) => {
   };
 
   updateDoc(doc(db, path), data);
+};
+
+export const getUserInfo = async (userId) => {
+  const docSnap = await getDoc(doc(db, 'users', userId));
+  return docSnap.data();
 };

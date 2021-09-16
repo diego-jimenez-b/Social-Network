@@ -48,7 +48,7 @@ function App() {
         )}
 
         <Route path='/general'>
-          <GeneralPosts />
+          <GeneralPosts isLoggedIn={authCtx.isLoggedIn} />
         </Route>
 
         <Route path='*'>

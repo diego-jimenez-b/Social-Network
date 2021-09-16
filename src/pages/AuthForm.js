@@ -1,4 +1,5 @@
 import { useContext, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import AuthContext from '../store/auth-context';
 import classes from './AuthForm.module.css';
 
@@ -79,9 +80,14 @@ const AuthForm = () => {
         <button type='submit'>{isLogin ? 'Log in' : 'Sign up'}</button>
       </form>
 
-      <span onClick={toggleLoginHandler} className={classes.text}>
-        Don't have an account? Register!
-      </span>
+      <div className={classes.actions}>
+        <span onClick={toggleLoginHandler} className={classes.text}>
+          {isLogin
+            ? "Don't have an account? Register!"
+            : 'Login with existing account'}
+        </span>
+        <Link to='general'>Enter as guest</Link>
+      </div>
     </div>
   );
 };
