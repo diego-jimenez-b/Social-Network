@@ -1,15 +1,21 @@
 .navbar {
   height: 60px;
-  background-color: rgb(51, 209, 143);
+  background-color: rgb(26, 184, 105);
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 1px 5px rgb(24, 24, 24);
 }
 .navbar a {
   color: rgba(255, 255, 255, 0.938);
   font-weight: bold;
   text-decoration: none;
-  font-size: 18.3px;
+  font-size: 18.7px;
   margin: 0 15px 0 0;
 }
+/* 
+.btn {
+  background-color: black;
+  color: white;
+} */

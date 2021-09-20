@@ -27,7 +27,7 @@ const MainNavigation = () => {
         <Link to='/profile'>Profile</Link>
       </div>
 
-      <button className='btn' onClick={logoutHandler}>
+      <button className={`btn ${classes.btn}`} onClick={logoutHandler}>
         Logout
       </button>
     </nav>

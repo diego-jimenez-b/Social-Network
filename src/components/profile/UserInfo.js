@@ -17,6 +17,8 @@ const UserInfo = () => {
   const authCtx = useContext(AuthContext);
   const [showConfig, setShowConfig] = useState(false);
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const { profilePicture: photo } = authCtx;
   useEffect(() => {
@@ -50,19 +52,27 @@ const UserInfo = () => {
   };
 
   const changeProfileImage = async () => {
+    setIsLoading(true);
+
     let newImageUrl;
+
     await uploadImage(`users/${authCtx.userId}/profile-image`, selectedFile);
     await getImageUrl(`users/${authCtx.userId}/profile-image`, (url) => {
       newImageUrl = url;
     });
-    updateDocument(`users/${authCtx.userId}`, {
+    await updateDocument(`users/${authCtx.userId}`, {
       photo: newImageUrl,
     });
 
     selectedFile = null;
-    authCtx.userChanged();
+    authCtx.pictureChange(newImageUrl);
     setShowConfig(false);
+    setIsLoading(false);
+
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 3000);
   };
+
   const cancelChange = () => {
     selectedFile = null;
     setImage(initialPicture);
@@ -72,6 +82,8 @@ const UserInfo = () => {
   const selectFile = () => {
     document.getElementById('file-input').click();
   };
+
+  const btnClasses = isLoading ? 'btn disabled' : 'btn';
 
   return (
     <div className={classes.info}>
@@ -86,6 +98,12 @@ const UserInfo = () => {
         <img src={image} className={classes['profile-img']} alt='profile' />
       )}
       <h3>{authCtx.userName}</h3>
+      {showMessage && (
+        <span className={classes.message}>
+          Your profile picture has been changed, you might need to refresh the
+          page to visualize this change
+        </span>
+      )}
 
       {showConfig && (
         <div className={classes.config}>
@@ -96,15 +114,28 @@ const UserInfo = () => {
             id='file-input'
           />
 
-          <button className='btn' onClick={selectFile}>
+          <button
+            className={btnClasses}
+            onClick={selectFile}
+            disabled={isLoading}
+          >
             change profile picture
           </button>
+
           {selectedFile && (
             <div className={classes['action-btns']}>
-              <button className='btn' onClick={changeProfileImage}>
+              <button
+                className={btnClasses}
+                onClick={changeProfileImage}
+                disabled={isLoading}
+              >
                 Confirm
               </button>
-              <button className='btn' onClick={cancelChange}>
+              <button
+                className={btnClasses}
+                onClick={cancelChange}
+                disabled={isLoading}
+              >
                 Cancel
               </button>
             </div>

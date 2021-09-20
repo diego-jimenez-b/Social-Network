@@ -55,7 +55,8 @@ const AuthForm = () => {
 
   return (
     <div className={classes['form-container']}>
-      <h1>Some title</h1>
+      <h1>Posts Demo</h1>
+
       <form onSubmit={formSubmitHandler}>
         <input
           type='text'
@@ -77,7 +78,9 @@ const AuthForm = () => {
           </div>
         )}
 
-        <button type='submit'>{isLogin ? 'Log in' : 'Sign up'}</button>
+        <button className={`btn ${classes.btn}`} type='submit'>
+          {isLogin ? 'Log in' : 'Sign up'}
+        </button>
       </form>
 
       <div className={classes.actions}>

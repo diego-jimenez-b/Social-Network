@@ -19,13 +19,11 @@ const initialUserState = {
 
 const AuthContextProvider = (props) => {
   const [user, setUser] = useState(initialUserState);
-  const [userChanges, setUserChanges] = useState(0);
   const history = useHistory();
 
   const auth = getAuth();
 
   useEffect(() => {
-    // console.log('working');
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const getUser = async () => {
@@ -40,7 +38,7 @@ const AuthContextProvider = (props) => {
         getUser();
       }
     });
-  }, [auth, userChanges]);
+  }, [auth]);
 
   const createNewUser = (email, password, name, lastname, fullname) => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -88,8 +86,8 @@ const AuthContextProvider = (props) => {
   const checkUserStatus = () => {
     console.log(auth.currentUser);
   };
-  const userChanged = () => {
-    setUserChanges((prevState) => (prevState += 1));
+  const pictureChange = (updatedPhoto) => {
+    setUser((prevState) => ({ ...prevState, profilePicture: updatedPhoto }));
   };
 
   const authContext = {
@@ -101,7 +99,7 @@ const AuthContextProvider = (props) => {
     login,
     logout,
     checkUserStatus,
-    userChanged,
+    pictureChange,
   };
 
   return (

@@ -9,16 +9,17 @@ import {
 import classes from './NewPost.module.css';
 
 const NewPost = ({ edit, onFinishEditing }) => {
-  const [editImg, setEditImg] = useState(null);
+  const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log('new post executed');
 
   useEffect(() => {
     console.log('effect working');
-    if (edit && edit.image) setEditImg(edit.image);
+    if (edit && edit.image) setImage(edit.image);
     if (!edit) {
-      setEditImg(null);
+      setImage(null);
     }
     setFile(null);
   }, [edit]);
@@ -37,7 +38,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
     if (event.target.files && currentFile) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setEditImg(e.target.result);
+        setImage(e.target.result);
         setFile(currentFile);
       };
       reader.readAsDataURL(event.target.files[0]);
@@ -54,11 +55,13 @@ const NewPost = ({ edit, onFinishEditing }) => {
       return;
     }
 
+    setIsLoading(true);
     let collection = 'posts';
     let filePath;
     if (file) {
       filePath = `users/${authCtx.userId}/${collection}/${file.name}`;
     }
+
     if (edit) {
       if (edit.isPrivate) collection = 'private-posts';
 
@@ -71,7 +74,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
       await updatePost(
         `users/${authCtx.userId}/${collection}/${edit.id}`,
         post,
-        !editImg ? editImg : file ? newImageUrl : null,
+        !image ? image : file ? newImageUrl : null,
         edit.image_local,
         filePath
       );
@@ -103,6 +106,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
     }
 
     resetNewPost();
+    setIsLoading(false);
   };
 
   const cancelEditingHandler = () => {
@@ -112,7 +116,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
 
   const removeImageHandler = () => {
     if (edit) {
-      setEditImg(false);
+      setImage(false);
     } else {
       resetNewPost(true);
     }
@@ -120,7 +124,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
 
   const resetNewPost = async (onlyImage) => {
     setFile(null);
-    setEditImg(null);
+    setImage(null);
     fileInputRef.current.value = null;
 
     if (!onlyImage) {
@@ -128,11 +132,13 @@ const NewPost = ({ edit, onFinishEditing }) => {
     }
   };
 
+  const btnClasses = isLoading ? `btn disabled` : 'btn';
+
   return (
     <div className={classes['new-post']}>
-      {editImg && (
+      {image && (
         <div className={classes['edit-img']}>
-          <img src={editImg} alt='post' />
+          <img src={image} alt='post' />
           <button onClick={removeImageHandler}>Remove image</button>
         </div>
       )}
@@ -148,22 +154,36 @@ const NewPost = ({ edit, onFinishEditing }) => {
         />
 
         <div>
-          <button className='btn' onClick={savePostHandler}>
+          <button
+            className={btnClasses}
+            onClick={savePostHandler}
+            disabled={isLoading}
+          >
             {edit ? 'Confirm edit' : 'Share'}
           </button>
 
           {!edit && (
-            <button className='btn' onClick={savePostHandler.bind(null, true)}>
+            <button
+              className={btnClasses}
+              onClick={savePostHandler.bind(null, true)}
+              disabled={isLoading}
+            >
               Save as private
             </button>
           )}
           {edit && (
-            <button className='btn' onClick={cancelEditingHandler}>
+            <button
+              className={btnClasses}
+              onClick={cancelEditingHandler}
+              disabled={isLoading}
+            >
               Cancel
             </button>
           )}
         </div>
       </div>
+
+      {isLoading && <span>Saving...</span>}
     </div>
   );
 };

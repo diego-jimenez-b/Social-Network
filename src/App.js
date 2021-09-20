@@ -8,6 +8,7 @@ import AuthForm from './pages/AuthForm';
 import GeneralPosts from './pages/GeneralPosts';
 import Profile from './pages/Profile';
 import AuthContext from './store/auth-context';
+import backgroundImg from './assets/background.jpg';
 
 function App() {
   console.log(db);
@@ -30,6 +31,7 @@ function App() {
       </div>
 
       {location.pathname !== '/auth' && <MainNavigation />}
+      <img className='background' src={backgroundImg} alt='background' />
 
       <Switch>
         <Route path='/' exact>

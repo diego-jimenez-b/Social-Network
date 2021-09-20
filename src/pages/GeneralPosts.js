@@ -9,7 +9,7 @@ const GeneralPosts = (props) => {
       {!props.isLoggedIn && (
         <div className={classes.message}>
           You are currently visualizing other people posts as a guest. Please
-          login to like other people posts and make your own
+          login to be able to like them and make your own
         </div>
       )}
 

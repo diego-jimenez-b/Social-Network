@@ -2,6 +2,8 @@
   margin-top: 10px;
 }
 .posts p {
+  background-color: white;
+  border-radius: 10px;
   text-align: center;
   font-weight: bold;
   font-size: 19px;

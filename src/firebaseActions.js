@@ -60,8 +60,8 @@ export const removeImage = (path) => {
   deleteObject(imgRef);
 };
 
-export const getImageUrl = async (image, action) => {
-  const url = await getDownloadURL(ref(storage, image));
+export const getImageUrl = async (path, action) => {
+  const url = await getDownloadURL(ref(storage, path))
   action(url);
 };
 
