@@ -1,54 +1,59 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useInput from '../hooks/useInput';
 import AuthContext from '../store/auth-context';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-
   const authCtx = useContext(AuthContext);
 
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-  const nameInputRef = useRef();
-  const lastnameInputRef = useRef();
+  const {
+    value: email,
+    isValid: emailIsValid,
+    hasError: emailHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+  } = useInput((value) => value.includes('@'));
+
+  const {
+    value: password,
+    isValid: passwordIsValid,
+    hasError: passwordHasError,
+    valueChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+  } = useInput((value) => value.trim().length >= 6);
+
+  const {
+    value: username,
+    isValid: usernameIsValid,
+    hasError: usernameHasError,
+    valueChangeHandler: usernameChangeHandler,
+    inputBlurHandler: usernameBlurHandler,
+  } = useInput((value) => value.trim().length >= 4);
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
-
-    // const emailIsValid =
-    //   enteredEmail.trim() !== '' && enteredEmail.includes('@');
-    // const passwordIsValid = enteredPassword.length >= 6;
-
-    // if (!emailIsValid || !passwordIsValid) return;
+    if (!emailIsValid || !passwordIsValid) {
+      emailBlurHandler();
+      passwordBlurHandler();
+      if (!isLogin && !usernameIsValid) usernameBlurHandler();
+      return;
+    }
 
     if (isLogin) {
-      authCtx.login(enteredEmail, enteredPassword);
+      authCtx.login(email, password);
     } else {
-      const enteredName = nameInputRef.current.value.trim();
-      const enteredLastname = lastnameInputRef.current.value.trim();
-
-      if (enteredName === '' || enteredLastname === '') {
-        alert('Please enter a valid name and lastname (non-empty inputs)');
-        return;
-      }
-
-      const fullname = enteredName + ' ' + enteredLastname;
-      authCtx.createNewUser(
-        enteredEmail,
-        enteredPassword,
-        enteredName,
-        enteredLastname,
-        fullname
-      );
+      authCtx.createNewUser(email, password, username);
     }
   };
 
   const toggleLoginHandler = () => {
     setIsLogin((prevState) => !prevState);
+  };
+  const getClasses = (error) => {
+    return `${classes.message} ${error ? classes.red : ''}`;
   };
 
   const passwordAutoTxt = isLogin ? 'current-password' : 'new-password';
@@ -61,20 +66,44 @@ const AuthForm = () => {
         <input
           type='text'
           placeholder='Email'
-          ref={emailInputRef}
+          value={email}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
           autoComplete='email'
+          className={emailHasError ? classes.error : ''}
         />
+        {emailHasError && (
+          <span className={getClasses(emailHasError)}>Invalid email</span>
+        )}
+
         <input
           type='password'
           placeholder='Password'
-          ref={passwordInputRef}
+          value={password}
+          onChange={passwordChangeHandler}
+          onBlur={passwordBlurHandler}
           autoComplete={passwordAutoTxt}
+          className={passwordHasError ? classes.error : ''}
         />
+        {(!isLogin || passwordHasError) && (
+          <span className={getClasses(passwordHasError)}>
+            6 characters or more
+          </span>
+        )}
 
         {!isLogin && (
           <div className={classes['user-info']}>
-            <input type='text' placeholder='Name' ref={nameInputRef} />
-            <input type='text' placeholder='Lastname' ref={lastnameInputRef} />
+            <input
+              type='text'
+              placeholder='Username'
+              value={username}
+              onChange={usernameChangeHandler}
+              onBlur={usernameBlurHandler}
+              className={usernameHasError ? classes.error : ''}
+            />
+            <span className={getClasses(usernameHasError)}>
+              4 characters or more
+            </span>
           </div>
         )}
 

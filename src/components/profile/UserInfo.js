@@ -97,7 +97,7 @@ const UserInfo = () => {
       {image && (
         <img src={image} className={classes['profile-img']} alt='profile' />
       )}
-      <h3>{authCtx.userName}</h3>
+      <h3>{authCtx.username}</h3>
       {showMessage && (
         <span className={classes.message}>
           Your profile picture has been changed, you might need to refresh the

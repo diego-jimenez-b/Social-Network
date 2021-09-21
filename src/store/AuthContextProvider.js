@@ -14,7 +14,7 @@ import { getUserInfo } from '../firebaseActions';
 const initialUserState = {
   isLoggedIn: false,
   id: '',
-  name: null,
+  username: null,
 };
 
 const AuthContextProvider = (props) => {
@@ -31,7 +31,7 @@ const AuthContextProvider = (props) => {
           setUser({
             isLoggedIn: true,
             id: user.uid,
-            name: userInfo.fullname,
+            username: userInfo.username,
             profilePicture: userInfo.photo,
           });
         };
@@ -40,7 +40,7 @@ const AuthContextProvider = (props) => {
     });
   }, [auth]);
 
-  const createNewUser = (email, password, name, lastname, fullname) => {
+  const createNewUser = (email, password, username) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
@@ -49,9 +49,7 @@ const AuthContextProvider = (props) => {
       })
       .then((id) => {
         return setDoc(doc(db, 'users', id), {
-          name,
-          lastname,
-          fullname,
+          username,
           email,
         });
       })
@@ -93,7 +91,7 @@ const AuthContextProvider = (props) => {
   const authContext = {
     isLoggedIn: user.isLoggedIn,
     userId: user.id,
-    userName: user.name,
+    username: user.username,
     profilePicture: user.profilePicture,
     createNewUser,
     login,

@@ -93,7 +93,7 @@ const NewPost = ({ edit, onFinishEditing }) => {
       await addDocument(`users/${authCtx.userId}/${collection}`, {
         text: post,
         timestamp: new Date().getTime(),
-        author: authCtx.userName,
+        author: authCtx.username,
         likes: {
           counter: 0,
           users: [],

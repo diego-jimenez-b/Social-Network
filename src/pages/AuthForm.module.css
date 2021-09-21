@@ -58,13 +58,34 @@
   cursor: pointer;
 }
 .form-container a {
+  color: rgb(38, 124, 194);
   text-align: center;
   text-decoration: none;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .user-info {
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   margin-bottom: 10px;
+}
+
+.message {
+  text-align: start;
+  display: block;
+  margin: -7px 0 5px 8.5%;
+  font-size: 14px;
+}
+
+.red {
+  color: rgb(170, 27, 27);
+}
+
+input.error {
+  background-color: rgba(255, 0, 0, 0.267);
+  border: .5px solid rgb(170, 27, 27);
+}
+input.error::placeholder {
+  color: rgb(242, 242, 242);
 }
