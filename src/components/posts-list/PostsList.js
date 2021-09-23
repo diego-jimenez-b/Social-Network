@@ -16,8 +16,6 @@ const PostsList = (props) => {
   const { isCollectionGroup, collPath, onEdit, isPrivate } = props;
 
   useEffect(() => {
-    console.log('effect working');
-
     let q;
     if (isCollectionGroup) {
       q = query(collectionGroup(db, collPath));

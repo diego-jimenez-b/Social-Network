@@ -28,8 +28,6 @@ export const updateDocument = async (path, obj) => {
 };
 
 export const updatePost = async (path, text, newImg, prevImg, newImgLocal) => {
-  console.log(newImg);
-
   let updatedObj = { text };
 
   if (newImg === false || (newImg && prevImg)) {
@@ -45,8 +43,6 @@ export const updatePost = async (path, text, newImg, prevImg, newImgLocal) => {
     updatedObj = { text, image: newImg, image_local: newImgLocal };
   }
 
-  console.log(updatedObj);
-
   await updateDoc(doc(db, path), updatedObj);
 };
 
@@ -61,7 +57,7 @@ export const removeImage = (path) => {
 };
 
 export const getImageUrl = async (path, action) => {
-  const url = await getDownloadURL(ref(storage, path))
+  const url = await getDownloadURL(ref(storage, path));
   action(url);
 };
 

@@ -1,5 +1,5 @@
 .navbar {
-  height: 60px;
+  height: 55px;
   background-color: rgb(26, 184, 105);
   padding: 0 20px;
   display: flex;
@@ -14,8 +14,3 @@
   font-size: 18.7px;
   margin: 0 15px 0 0;
 }
-/* 
-.btn {
-  background-color: black;
-  color: white;
-} */

@@ -43,7 +43,6 @@ const AuthContextProvider = (props) => {
   const createNewUser = (email, password, username) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         setUser({ isLoggedIn: true, id: userCredential.user.uid });
         return userCredential.user.uid;
       })
@@ -65,7 +64,6 @@ const AuthContextProvider = (props) => {
   const login = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         setUser({ isLoggedIn: true, id: userCredential.user.uid });
       })
       .then(() => {
@@ -81,9 +79,6 @@ const AuthContextProvider = (props) => {
     setUser(initialUserState);
   };
 
-  const checkUserStatus = () => {
-    console.log(auth.currentUser);
-  };
   const pictureChange = (updatedPhoto) => {
     setUser((prevState) => ({ ...prevState, profilePicture: updatedPhoto }));
   };
@@ -96,7 +91,6 @@ const AuthContextProvider = (props) => {
     createNewUser,
     login,
     logout,
-    checkUserStatus,
     pictureChange,
   };
 
