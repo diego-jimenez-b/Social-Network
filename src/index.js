@@ -7,7 +7,7 @@ import AuthContextProvider from './store/AuthContextProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename='/Social-Network'>
       <AuthContextProvider>
         <App />
       </AuthContextProvider>
