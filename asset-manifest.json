@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Social-Network/static/css/main.6faafffd.chunk.css",
+    "main.css": "/Social-Network/static/css/main.b6a65ee6.chunk.css",
     "main.js": "/Social-Network/static/js/main.b882aaac.chunk.js",
     "main.js.map": "/Social-Network/static/js/main.b882aaac.chunk.js.map",
     "runtime-main.js": "/Social-Network/static/js/runtime-main.b0b1e67c.js",
@@ -8,7 +8,7 @@
     "static/js/2.7ce2532b.chunk.js": "/Social-Network/static/js/2.7ce2532b.chunk.js",
     "static/js/2.7ce2532b.chunk.js.map": "/Social-Network/static/js/2.7ce2532b.chunk.js.map",
     "index.html": "/Social-Network/index.html",
-    "static/css/main.6faafffd.chunk.css.map": "/Social-Network/static/css/main.6faafffd.chunk.css.map",
+    "static/css/main.b6a65ee6.chunk.css.map": "/Social-Network/static/css/main.b6a65ee6.chunk.css.map",
     "static/js/2.7ce2532b.chunk.js.LICENSE.txt": "/Social-Network/static/js/2.7ce2532b.chunk.js.LICENSE.txt",
     "static/media/background.a22d7c02.jpg": "/Social-Network/static/media/background.a22d7c02.jpg",
     "static/media/down-arrow.474a217e.svg": "/Social-Network/static/media/down-arrow.474a217e.svg",
@@ -21,7 +21,7 @@
   "entrypoints": [
     "static/js/runtime-main.b0b1e67c.js",
     "static/js/2.7ce2532b.chunk.js",
-    "static/css/main.6faafffd.chunk.css",
+    "static/css/main.b6a65ee6.chunk.css",
     "static/js/main.b882aaac.chunk.js"
   ]
 }
